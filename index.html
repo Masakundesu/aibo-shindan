@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>aibo 愛・I 診断 | あなたの愛のカタチを16タイプで</title>
+<meta property="og:title" content="aibo 愛・I 診断 | あなたの愛のカタチを16タイプで">
+<meta property="og:description" content="恋愛・パートナーシップの価値観を4つの軸×16タイプで診断。パートナーと一緒に受けて、二人の相性を知ろう。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://aibo-shindan.com/ogp.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--pink:#E8A0BF;--purple:#A78BCA;--deep:#6B4C8A;--soft:#F5E6F0;
+--cream:#FFF8F0;--coral:#FF8A9E;--mint:#A8E6CF;--gold:#FFD700;
+--text:#3D2C4E;--sub:#7A6B8A;--bg:linear-gradient(135deg,#FFF0F5 0%,#F0E6FF 50%,#E6F0FF 100%);
+}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{font-family:'Noto Sans JP',sans-serif;color:var(--text);background:var(--bg);min-height:100vh;overflow-x:hidden;line-height:1.7}
+.screen{display:none;animation:fadeIn .6s ease}
+.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes ripple{0%{box-shadow:0 0 0 0 rgba(232,160,191,.4)}70%{box-shadow:0 0 0 15px rgba(232,160,191,0)}100%{box-shadow:0 0 0 0 rgba(232,160,191,0)}}
+
+/* ===== TOP SCREEN ===== */
+.top-screen{text-align:center;padding:40px 20px 60px;max-width:480px;margin:0 auto}
+.top-logo{font-size:3rem;font-weight:900;background:linear-gradient(135deg,var(--coral),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:.05em;margin-bottom:4px}
+.top-sub{font-size:.85rem;color:var(--sub);margin-bottom:32px;letter-spacing:.15em}
+.top-hero{width:200px;height:200px;margin:0 auto 28px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--purple));display:flex;align-items:center;justify-content:center;font-size:5rem;animation:float 3s ease-in-out infinite;box-shadow:0 12px 40px rgba(167,139,202,.3)}
+.top-catch{font-size:1.3rem;font-weight:700;margin-bottom:12px;line-height:1.6}
+.top-catch span{background:linear-gradient(transparent 60%,rgba(232,160,191,.35) 60%)}
+.top-desc{font-size:.85rem;color:var(--sub);margin-bottom:36px;line-height:1.8;padding:0 8px}
+.top-badges{display:flex;justify-content:center;gap:12px;margin-bottom:32px;flex-wrap:wrap}
+.badge{background:#fff;border-radius:20px;padding:6px 14px;font-size:.72rem;color:var(--deep);box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;align-items:center;gap:4px}
+.start-btn{display:inline-block;background:linear-gradient(135deg,var(--coral),var(--purple));color:#fff;border:none;border-radius:50px;padding:16px 48px;font-size:1.1rem;font-weight:700;cursor:pointer;letter-spacing:.1em;box-shadow:0 6px 24px rgba(232,160,191,.4);transition:all .3s;animation:ripple 2s infinite}
+.start-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(232,160,191,.5)}
+.top-note{font-size:.7rem;color:var(--sub);margin-top:20px}
+.partner-link{display:block;margin-top:16px;font-size:.8rem;color:var(--purple);text-decoration:underline;cursor:pointer}
+
+/* ===== QUESTION SCREEN ===== */
+.q-screen{max-width:480px;margin:0 auto;padding:20px 16px 40px}
+.q-progress{display:flex;align-items:center;gap:8px;margin-bottom:20px}
+.q-bar-wrap{flex:1;height:6px;background:rgba(255,255,255,.6);border-radius:3px;overflow:hidden}
+.q-bar{height:100%;background:linear-gradient(90deg,var(--coral),var(--purple));border-radius:3px;transition:width .4s ease}
+.q-num{font-size:.75rem;color:var(--sub);white-space:nowrap}
+.q-axis-tag{display:inline-block;background:rgba(167,139,202,.15);color:var(--deep);font-size:.65rem;padding:3px 10px;border-radius:12px;margin-bottom:10px}
+.q-text{font-size:1.05rem;font-weight:700;margin-bottom:20px;line-height:1.6;min-height:3.2em}
+.q-options{display:flex;flex-direction:column;gap:10px}
+.q-opt{background:#fff;border:2px solid transparent;border-radius:14px;padding:14px 16px;font-size:.88rem;cursor:pointer;transition:all .25s;text-align:left;line-height:1.5;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.q-opt:hover{border-color:var(--pink);transform:translateX(4px)}
+.q-opt.selected{border-color:var(--purple);background:linear-gradient(135deg,rgba(232,160,191,.1),rgba(167,139,202,.1))}
+.q-nav{display:flex;justify-content:space-between;margin-top:24px}
+.q-nav-btn{background:none;border:1px solid var(--purple);color:var(--purple);border-radius:24px;padding:8px 24px;font-size:.82rem;cursor:pointer;transition:all .2s}
+.q-nav-btn:hover{background:var(--purple);color:#fff}
+.q-nav-btn.next{background:var(--purple);color:#fff;border:none}
+.q-nav-btn.next:hover{background:var(--deep)}
+.q-nav-btn:disabled{opacity:.3;cursor:not-allowed}
+
+/* ===== LOADING SCREEN ===== */
+.loading-screen{text-align:center;padding:80px 20px;max-width:480px;margin:0 auto}
+.loading-circle{width:80px;height:80px;margin:0 auto 24px;border-radius:50%;border:4px solid var(--soft);border-top-color:var(--purple);animation:spin 1s linear infinite}
+.loading-text{font-size:1rem;color:var(--sub);margin-bottom:8px}
+.loading-sub{font-size:.75rem;color:var(--sub)}
+.loading-axes{margin-top:32px;display:flex;flex-direction:column;gap:12px;max-width:280px;margin-left:auto;margin-right:auto}
+.loading-axis{display:flex;align-items:center;gap:10px}
+.loading-axis-icon{font-size:1.2rem;opacity:0;animation:fadeIn .4s ease forwards}
+.loading-axis-label{font-size:.82rem;color:var(--text);opacity:0;animation:fadeIn .4s ease forwards}
+.loading-axis-check{color:var(--mint);font-weight:700;opacity:0;animation:fadeIn .3s ease forwards}
+
+/* ===== RESULT SCREEN ===== */
+.result-screen{max-width:520px;margin:0 auto;padding:24px 16px 60px}
+.result-header{text-align:center;margin-bottom:28px}
+.result-pre{font-size:.8rem;color:var(--sub);margin-bottom:4px}
+.result-type-code{font-size:.75rem;color:var(--purple);background:rgba(167,139,202,.1);padding:2px 12px;border-radius:12px;display:inline-block;margin-bottom:8px}
+.result-name{font-size:1.6rem;font-weight:900;margin-bottom:4px}
+.result-emoji{font-size:3.5rem;margin:12px 0;animation:float 3s ease-in-out infinite}
+.result-copy{font-size:.9rem;color:var(--sub);font-style:italic;margin-bottom:0}
+.result-card{background:#fff;border-radius:20px;padding:24px 20px;margin-bottom:16px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.result-card h3{font-size:.95rem;font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--soft);display:flex;align-items:center;gap:6px}
+.result-card p{font-size:.85rem;line-height:1.8;color:var(--text)}
+
+/* Axis Radar */
+.radar-wrap{text-align:center;margin-bottom:0}
+.radar-wrap canvas{max-width:280px;margin:0 auto}
+.axis-bars{display:flex;flex-direction:column;gap:14px;margin-top:16px}
+.axis-bar-item{display:flex;align-items:center;gap:8px}
+.axis-label-l,.axis-label-r{font-size:.7rem;color:var(--sub);width:56px;text-align:center}
+.axis-bar-track{flex:1;height:10px;background:var(--soft);border-radius:5px;position:relative;overflow:hidden}
+.axis-bar-fill{height:100%;border-radius:5px;transition:width .8s ease}
+.axis-bar-center{position:absolute;left:50%;top:0;width:2px;height:100%;background:rgba(0,0,0,.1)}
+.axis-bar-dot{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;border:2px solid #fff;transform:translate(-50%,-50%);box-shadow:0 1px 4px rgba(0,0,0,.2);transition:left .8s ease}
+
+/* Tags */
+.tag-list{display:flex;flex-wrap:wrap;gap:8px}
+.tag{background:var(--soft);color:var(--deep);font-size:.78rem;padding:5px 12px;border-radius:16px}
+/* Advice */
+.advice-list{display:flex;flex-direction:column;gap:10px}
+.advice-item{display:flex;gap:8px;align-items:flex-start}
+.advice-num{background:var(--purple);color:#fff;width:22px;height:22px;border-radius:50%;font-size:.7rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.advice-text{font-size:.83rem;line-height:1.7}
+
+/* Compat */
+.compat-best,.compat-grow{background:var(--soft);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.compat-label{font-size:.72rem;font-weight:700;color:var(--purple);margin-bottom:4px}
+.compat-types{font-size:.85rem;font-weight:500}
+.compat-reason{font-size:.78rem;color:var(--sub);margin-top:4px;line-height:1.6}
+
+/* Partner Section */
+.partner-section{background:linear-gradient(135deg,rgba(232,160,191,.1),rgba(167,139,202,.1));border-radius:20px;padding:24px 20px;margin-bottom:16px;text-align:center}
+.partner-section h3{font-size:1rem;font-weight:700;margin-bottom:12px}
+.partner-btn{display:inline-block;background:linear-gradient(135deg,var(--coral),var(--purple));color:#fff;border:none;border-radius:50px;padding:12px 32px;font-size:.9rem;font-weight:700;cursor:pointer;letter-spacing:.05em;box-shadow:0 4px 16px rgba(232,160,191,.3);transition:all .3s}
+.partner-btn:hover{transform:translateY(-2px)}
+.partner-result{margin-top:16px;text-align:left}
+.partner-match-score{text-align:center;font-size:2rem;font-weight:900;background:linear-gradient(135deg,var(--coral),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:12px 0 4px}
+.partner-match-label{text-align:center;font-size:.8rem;color:var(--sub);margin-bottom:16px}
+
+/* Share */
+.share-section{text-align:center;margin-top:24px}
+.share-section h3{font-size:.9rem;font-weight:700;margin-bottom:12px}
+.share-btns{display:flex;justify-content:center;gap:12px}
+.share-btn{display:flex;align-items:center;gap:6px;padding:10px 20px;border-radius:24px;font-size:.82rem;font-weight:500;cursor:pointer;border:none;color:#fff;transition:all .2s}
+.share-btn:hover{transform:translateY(-2px)}
+.share-btn.x{background:#000}
+.share-btn.line{background:#06C755}
+.share-btn.copy{background:var(--purple)}
+.retry-btn{display:inline-block;margin-top:20px;background:none;border:1px solid var(--purple);color:var(--purple);border-radius:24px;padding:8px 24px;font-size:.82rem;cursor:pointer;transition:all .2s}
+.retry-btn:hover{background:var(--purple);color:#fff}
+
+/* Children value indicator */
+.child-val{display:flex;align-items:center;gap:8px;margin-top:8px;padding:8px 12px;background:rgba(168,230,207,.15);border-radius:10px}
+.child-val-icon{font-size:1.2rem}
+.child-val-text{font-size:.78rem;color:var(--text);line-height:1.5}
+</style>
+</head>
+<body>
+
+<!-- ===== TOP SCREEN ===== -->
+<div id="topScreen" class="screen active">
+<div class="top-screen">
+  <div class="top-logo">aibo</div>
+  <div class="top-sub">愛・I 診断</div>
+  <div class="top-hero">💕</div>
+  <div class="top-catch"><span>あなたの「愛のカタチ」を</span><br><span>16タイプで診断</span></div>
+  <p class="top-desc">恋愛心理学・愛着理論・ゴットマン理論に基づく4つの軸で、あなたの愛し方・愛され方のパターンを分析します。パートナーと一緒に受けて相性も確認できます。</p>
+  <div class="top-badges">
+    <span class="badge">🧠 臨床心理学ベース</span>
+    <span class="badge">💑 パートナー相性診断</span>
+    <span class="badge">⏱ 約3分</span>
+    <span class="badge">📊 20問</span>
+  </div>
+  <button class="start-btn" onclick="startQuiz()">診断をはじめる</button>
+  <p class="top-note">※ 個人情報の入力は不要です</p>
+</div>
+</div>
+
+<!-- ===== QUESTION SCREEN ===== -->
+<div id="qScreen" class="screen">
+<div class="q-screen">
+  <div class="q-progress">
+    <div class="q-bar-wrap"><div class="q-bar" id="qBar"></div></div>
+    <span class="q-num" id="qNum">1/20</span>
+  </div>
+  <div class="q-axis-tag" id="qAxis"></div>
+  <div class="q-text" id="qText"></div>
+  <div class="q-options" id="qOpts"></div>
+  <div class="q-nav">
+    <button class="q-nav-btn" id="prevBtn" onclick="prevQ()" disabled>← 戻る</button>
+    <button class="q-nav-btn next" id="nextBtn" onclick="nextQ()" disabled>次へ →</button>
+  </div>
+</div>
+</div>
+
+<!-- ===== LOADING SCREEN ===== -->
+<div id="loadScreen" class="screen">
+<div class="loading-screen">
+  <div class="loading-circle"></div>
+  <p class="loading-text">あなたの愛のカタチを分析中...</p>
+  <p class="loading-sub">4つの軸から16タイプを判定しています</p>
+  <div class="loading-axes" id="loadAxes"></div>
+</div>
+</div>
+
+<!-- ===== RESULT SCREEN ===== -->
+<div id="resultScreen" class="screen">
+<div class="result-screen" id="resultContent"></div>
+</div>
+
+<script>
+// ============================
+// AIBO DIAGNOSTIC ENGINE v2.0
+// 4 Axes × 16 Types
+// Based on: Attachment Theory, Gottman Method, Love Languages, Interview Insights
+// ============================
+
+const AXES = [
+  { id:'A', name:'愛情表現', icon:'💗', tagL:'オープン', tagR:'ひかえめ', color:'#FF8A9E' },
+  { id:'I', name:'親密スタイル', icon:'🔥', tagL:'情熱的', tagR:'安定的', color:'#E8A0BF' },
+  { id:'B', name:'パートナーとの距離感', icon:'🤝', tagL:'自立型', tagR:'密着型', color:'#A78BCA' },
+  { id:'O', name:'将来・家族観', icon:'🌱', tagL:'柔軟型', tagR:'計画型', color:'#A8E6CF' }
+];
+
+// 20 Questions: 5 per axis
+// Each option: [A_score, I_score, B_score, O_score]
+// Positive = left side (Open/Passionate/Free/Dynamic), Negative = right side
+const QUESTIONS = [
+  // === A: Affection Expression (愛情表現) ===
+  { axis:0, text:'パートナーに「好き」「愛してる」と言葉にすることについて、あなたはどう感じますか？',
+    opts:[
+      {t:'自然に毎日言えるし、言いたい', s:[3,0,0,0]},
+      {t:'たまに言うけど、照れくさい時もある', s:[1,0,0,0]},
+      {t:'言葉より態度で示したいタイプ', s:[-1,0,0,0]},
+      {t:'恥ずかしくて、ほとんど言えない', s:[-3,0,0,0]}
+    ]},
+  { axis:0, text:'パートナーと意見が食い違った時、あなたはどうしますか？',
+    opts:[
+      {t:'その場で率直に自分の気持ちを伝える', s:[3,0,0,0]},
+      {t:'少し時間を置いてから、冷静に話す', s:[1,0,0,0]},
+      {t:'相手の様子を見ながら、タイミングを探る', s:[-1,0,0,0]},
+      {t:'自分の中で消化して、あまり言わない', s:[-3,0,0,0]}
+    ]},
+  { axis:0, text:'パートナーとの「性」や「スキンシップ」について話し合うことは…',
+    opts:[
+      {t:'お互いオープンに話せる・話したい', s:[3,0,0,0]},
+      {t:'必要があれば話すけど、積極的ではない', s:[1,0,0,0]},
+      {t:'話題にするのはちょっと勇気がいる', s:[-1,0,0,0]},
+      {t:'できれば避けたい。察してほしい', s:[-3,0,0,0]}
+    ]},
+  { axis:0, text:'記念日やイベントのお祝い、あなたのスタイルは？',
+    opts:[
+      {t:'サプライズや手紙など、形にして伝えたい', s:[3,0,0,0]},
+      {t:'一緒に過ごす時間を大切にしたい', s:[1,0,0,0]},
+      {t:'特別なことはしないけど、気持ちはある', s:[-1,0,0,0]},
+      {t:'あまり気にしない。日常が大事', s:[-3,0,0,0]}
+    ]},
+  { axis:0, text:'パートナーに不満を感じた時、あなたは…',
+    opts:[
+      {t:'早めに伝えて一緒に解決したい', s:[3,0,0,0]},
+      {t:'伝えるけど、言い方に悩む', s:[1,0,0,0]},
+      {t:'我慢することが多い。でも溜まる', s:[-1,0,0,0]},
+      {t:'不満を感じても、表に出さない', s:[-3,0,0,0]}
+    ]},
+
+  // === I: Intimacy Style (親密スタイル) ===
+  { axis:1, text:'パートナーとの「ドキドキ」や「ときめき」について、どう思いますか？',
+    opts:[
+      {t:'長く一緒にいても、ときめきは絶対必要！', s:[0,3,0,0]},
+      {t:'たまにときめきがあると嬉しい', s:[0,1,0,0]},
+      {t:'安心感のほうが大事。ドキドキはなくてもいい', s:[0,-1,0,0]},
+      {t:'落ち着いた関係が理想。ときめきは求めない', s:[0,-3,0,0]}
+    ]},
+  { axis:1, text:'パートナーとのスキンシップ（手をつなぐ、ハグなど）はどのくらいが理想？',
+    opts:[
+      {t:'毎日たくさん触れ合いたい', s:[0,3,0,0]},
+      {t:'自然な流れで日常的にあるといい', s:[0,1,0,0]},
+      {t:'たまにで十分。気が向いた時に', s:[0,-1,0,0]},
+      {t:'なくても特に困らない', s:[0,-3,0,0]}
+    ]},
+  { axis:1, text:'デートで行きたいのは？',
+    opts:[
+      {t:'新しい場所やアクティビティに挑戦したい', s:[0,3,0,0]},
+      {t:'お気に入りの場所をベースに、たまに新しい場所も', s:[0,1,0,0]},
+      {t:'いつもの場所でゆっくり過ごしたい', s:[0,-1,0,0]},
+      {t:'家でまったりが一番落ち着く', s:[0,-3,0,0]}
+    ]},
+  { axis:1, text:'「マンネリ」について、あなたはどう感じますか？',
+    opts:[
+      {t:'マンネリは大敵！常に新鮮さを求めたい', s:[0,3,0,0]},
+      {t:'ちょっとした変化は必要だと思う', s:[0,1,0,0]},
+      {t:'安定した日常も悪くないと思う', s:[0,-1,0,0]},
+      {t:'マンネリとは思わない。それが心地いい', s:[0,-3,0,0]}
+    ]},
+  { axis:1, text:'パートナーとの性的な関係で大切にしたいことは？',
+    opts:[
+      {t:'お互いの欲求を積極的に探求したい', s:[0,3,0,0]},
+      {t:'相手の気持ちを尊重しつつ、自分の希望も伝えたい', s:[0,1,0,0]},
+      {t:'自然な流れに任せたい。無理はしない', s:[0,-1,0,0]},
+      {t:'精神的なつながりがあれば、頻度は気にしない', s:[0,-3,0,0]}
+    ]},
+
+  // === B: Bonding Distance (距離感) ===
+  { axis:2, text:'理想のパートナーとの休日の過ごし方は？',
+    opts:[
+      {t:'それぞれ好きなことをして、夜に合流', s:[0,0,3,0]},
+      {t:'午前は自由、午後は一緒に過ごす', s:[0,0,1,0]},
+      {t:'基本一緒に過ごすけど、お互い自由な時間も', s:[0,0,-1,0]},
+      {t:'起きてから寝るまでずっと一緒がいい', s:[0,0,-3,0]}
+    ]},
+  { axis:2, text:'パートナーのスマホを見ることについてどう思いますか？',
+    opts:[
+      {t:'お互いのプライバシーは絶対。見る必要なし', s:[0,0,3,0]},
+      {t:'基本見ないけど、オープンな関係がいい', s:[0,0,1,0]},
+      {t:'ロックはかけないでほしい。安心したい', s:[0,0,-1,0]},
+      {t:'見せ合えるくらいの関係が理想', s:[0,0,-3,0]}
+    ]},
+  { axis:2, text:'パートナーが異性の友人と二人で食事に行くことについて…',
+    opts:[
+      {t:'全く問題ない。自分も行くし', s:[0,0,3,0]},
+      {t:'事前に言ってくれれば気にしない', s:[0,0,1,0]},
+      {t:'正直、少しモヤモヤする', s:[0,0,-1,0]},
+      {t:'できれば行ってほしくない', s:[0,0,-3,0]}
+    ]},
+  { axis:2, text:'パートナーとの「報連相」（今どこにいる・何してるの共有）は？',
+    opts:[
+      {t:'必要最低限でいい。束縛は苦手', s:[0,0,3,0]},
+      {t:'大事なことは共有。細かいことはお任せ', s:[0,0,1,0]},
+      {t:'こまめに連絡を取り合いたい', s:[0,0,-1,0]},
+      {t:'常につながっていたい。既読つかないと不安', s:[0,0,-3,0]}
+    ]},
+  { axis:2, text:'パートナーとの「お財布事情」について、理想は？',
+    opts:[
+      {t:'完全に別管理。自分のお金は自分で', s:[0,0,3,0]},
+      {t:'共通費用だけ折半。残りは自由', s:[0,0,1,0]},
+      {t:'大きな買い物は相談。日常は自由に', s:[0,0,-1,0]},
+      {t:'収入も支出もすべてオープンに共有', s:[0,0,-3,0]}
+    ]},
+
+  // === O: Outlook / Life Vision (将来・家族観) ===
+  { axis:3, text:'子どもを持つことについて、あなたの考えは？',
+    opts:[
+      {t:'その時の状況と気持ちで決めたい', s:[0,0,0,3]},
+      {t:'いつかは欲しいけど、時期はまだ考え中', s:[0,0,0,1]},
+      {t:'◯歳までには、と目標がある', s:[0,0,0,-1]},
+      {t:'人数や時期まで具体的に考えている', s:[0,0,0,-3]}
+    ]},
+  { axis:3, text:'5年後の「二人の暮らし」のイメージは？',
+    opts:[
+      {t:'まだわからない。一緒にいればなんでもOK', s:[0,0,0,3]},
+      {t:'ぼんやりとしたイメージはある', s:[0,0,0,1]},
+      {t:'住む場所や生活スタイルは決めておきたい', s:[0,0,0,-1]},
+      {t:'具体的な計画を立てて着実に進めたい', s:[0,0,0,-3]}
+    ]},
+  { axis:3, text:'パートナーの転勤や転職で生活が変わるとしたら…',
+    opts:[
+      {t:'新しい環境を楽しめる！ワクワクする', s:[0,0,0,3]},
+      {t:'不安はあるけど、一緒なら大丈夫', s:[0,0,0,1]},
+      {t:'事前にしっかり計画を立ててから決めたい', s:[0,0,0,-1]},
+      {t:'できれば安定した環境を維持したい', s:[0,0,0,-3]}
+    ]},
+  { axis:3, text:'「家事・育児の役割分担」について、あなたの考えは？',
+    opts:[
+      {t:'その時できる人がやればいい。柔軟に', s:[0,0,0,3]},
+      {t:'大まかには決めるけど、状況に応じて変える', s:[0,0,0,1]},
+      {t:'きちんと分担を決めておきたい', s:[0,0,0,-1]},
+      {t:'役割は明確にして、お互いの責任を果たしたい', s:[0,0,0,-3]}
+    ]},
+  { axis:3, text:'パートナーとの「結婚観」に近いのは？',
+    opts:[
+      {t:'形にこだわらない。一緒にいることが大事', s:[0,0,0,3]},
+      {t:'いつかは結婚したいけど、急がない', s:[0,0,0,1]},
+      {t:'◯歳までには結婚したい目標がある', s:[0,0,0,-1]},
+      {t:'結婚→出産→マイホームのプランがある', s:[0,0,0,-3]}
+    ]},
+];
+
+// ============================
+// 16 TYPES DEFINITION
+// Code: [O/R][P/S][F/T][D/L]
+// O=Open, R=Reserved, P=Passionate, S=Steady, F=Free, T=Together, D=Dynamic, L=pLanned
+// ============================
+const TYPES = {
+  'OPFD': {
+    name:'太陽のラブアーティスト', emoji:'🌞',
+    copy:'愛を全力で表現する、自由奔放な情熱家',
+    desc:'あなたは愛情表現がとてもオープンで、パートナーとの関係に常にときめきと新鮮さを求めます。自分の時間も大切にしつつ、将来は柔軟に二人で決めていきたいタイプ。「好き」をストレートに伝え、関係にマンネリが訪れることを何より恐れます。束縛は苦手ですが、一緒にいる時は全力で愛情を注ぎます。',
+    strengths:['感情表現が豊か','冒険心に溢れる','パートナーを飽きさせない','自分軸がしっかりしている'],
+    aruaru:['「好き」と1日5回は言う','記念日のサプライズが毎回大がかり','デートプランが常に進化','ひとりの時間がないと逆に愛が枯れる'],
+    advice:['情熱の温度差にパートナーが疲れることも。相手のペースも確認して','自由を大切にするあまり、相手が不安にならない工夫を','「安定」も愛の一形態。穏やかな時間も楽しんで'],
+    child:'子どもについてはその時の流れで。「二人が幸せなら」が基本スタンス',
+    bestMatch:['RSFL','RPTD'], growMatch:['RSTL','OPFL'],
+    bestReason:'あなたの情熱を安心感で受け止めてくれる安定型パートナーとの相性◎',
+    growReason:'似たタイプ同士はぶつかることも。お互いの「違い」を楽しむ姿勢が大切'
+  },
+  'OPFL': {
+    name:'ロマンスの冒険家', emoji:'🦋',
+    copy:'自由と情熱を両立する、計画的な恋の達人',
+    desc:'愛情はオープンに伝え、関係には情熱を求めつつ、将来のビジョンはしっかり持っている珍しいバランス型。自分の世界を持ちながらも、人生設計についてはパートナーとしっかり話し合いたいタイプ。夢と現実を両立させる力があります。',
+    strengths:['情熱と計画性の両立','コミュニケーション力が高い','自立した恋愛ができる','ライフプランニング力'],
+    aruaru:['デートもサプライズも完璧に計画','子どもの教育方針まで考えてる','でも束縛されると冷める','理想のプロポーズを密かにシミュレーション'],
+    advice:['計画通りにいかない時も、パートナーを責めないで','相手にも自分と同じレベルの情熱を求めすぎないように','「完璧な関係」より「成長する関係」を目指して'],
+    child:'子どもは欲しいし、時期や教育方針のイメージもある。でもパートナーとの合意を最優先にしたい',
+    bestMatch:['RSFD','RSTD'], growMatch:['OPFD','RPTL'],
+    bestReason:'あなたの計画性を穏やかに受け入れてくれる安定型との相性が良い',
+    growReason:'お互い主張が強いタイプとは、役割分担の明確化がポイント'
+  },
+  'OPTD': {
+    name:'ハートフルナビゲーター', emoji:'💫',
+    copy:'愛も将来も全力で。みんなの太陽になるパートナー',
+    desc:'愛情表現はオープンで、パートナーとはいつも一緒にいたい情熱タイプ。でも将来は柔軟に考えられる適応力の持ち主。二人の世界を大切にしながら、「今この瞬間」を全力で楽しむ姿勢が魅力です。パートナーへの愛を惜しみなく注ぎます。',
+    strengths:['愛情深い','適応力がある','パートナー思い','ポジティブ'],
+    aruaru:['「一緒にいたい」が口癖','パートナーの体調変化にすぐ気づく','二人で過ごす何気ない日常が宝物','将来は二人で話しながら決めたい派'],
+    advice:['「一緒にいたい」が重荷にならないよう、相手の反応を見て','自分の時間も確保すると、関係がもっと豊かに','将来の話を「楽しい会話」として習慣化して'],
+    child:'子どもについてはその時の二人の気持ち次第。でもパートナーと愛を確認し合える関係が大前提',
+    bestMatch:['RSFD','RPFL'], growMatch:['OPFD','RSTL'],
+    bestReason:'あなたの情熱を静かに支えてくれる自立型パートナーとの相性◎',
+    growReason:'密着型同士はお互いを消耗することも。適度な距離感を意識して'
+  },
+  'OPTL': {
+    name:'愛のアーキテクト', emoji:'🏰',
+    copy:'深い愛と確かなビジョンで理想の関係を築く人',
+    desc:'愛もオープンに伝え、パートナーとの密着感も大切にし、人生のロードマップもしっかり描くあなた。「二人の理想の未来」を具体的に語り合うことが何より幸せ。計画性と情熱を兼ね備えた、関係構築の達人です。',
+    strengths:['ビジョンが明確','深い愛情表現','安定感がある','目標達成力'],
+    aruaru:['結婚式のイメージまで出来上がっている','家計簿アプリを二人で共有','将来の家の間取りを一緒に見る時間が至福','愛は言葉と行動の両方で示す'],
+    advice:['計画に縛られすぎると、お互い息苦しくなるかも','パートナーのペースも尊重して、「待つ愛」も大切に','完璧を目指しすぎず、一緒に成長するプロセスを楽しんで'],
+    child:'子どもの有無、時期、教育方針について早めに話し合いたい。パートナーとの価値観のすり合わせを重視',
+    bestMatch:['RSFD','RPTD'], growMatch:['OPFD','OPTD'],
+    bestReason:'あなたの計画を尊重しつつ、自由な視点を加えてくれるパートナーとの相性◎',
+    growReason:'お互いにルールを決めすぎると窮屈に。「遊び」を意識的に取り入れて'
+  },
+  'OSFD': {
+    name:'穏やかな自由人', emoji:'🌿',
+    copy:'さりげない愛情と自由なスタイルの、マイペースな恋愛家',
+    desc:'愛情はオープンに伝えつつ、関係には安定感を求めるあなた。自分の時間を大切にし、将来も柔軟に考える余裕があります。パートナーとは程よい距離感で、お互いを尊重し合う大人な関係が理想。穏やかだけど、気持ちはしっかり伝える温かさの持ち主。',
+    strengths:['心に余裕がある','安定した愛情','自立心がある','柔軟性が高い'],
+    aruaru:['休日は別々に過ごしても平気','でも「好きだよ」はちゃんと言う','将来のことは深刻に考えすぎない','友達カップルに「理想の関係だね」と言われがち'],
+    advice:['穏やかすぎて「冷たい」と感じられることも。意識的に愛情表現を','自由を大切にしすぎて、大事な話し合いを後回しにしないで','時にはパートナーのためにサプライズを'],
+    child:'子どもは自然の流れに任せたい。いてもいなくても、二人が幸せならOK',
+    bestMatch:['RPTL','RPTD'], growMatch:['OPTL','OSFL'],
+    bestReason:'あなたの自由さを安心して見守ってくれる密着・安定タイプとの相性◎',
+    growReason:'穏やかタイプ同士は関係が停滞しがち。意識的に刺激を取り入れて'
+  },
+  'OSFL': {
+    name:'未来設計のリアリスト', emoji:'📐',
+    copy:'穏やかな愛と確かな計画で、着実に幸せを築く人',
+    desc:'コミュニケーションはオープンだけど、関係に刺激より安定を求め、将来は計画的に進めたいタイプ。自立心が強く、パートナーともお互いの空間を尊重。結婚や子育てについて現実的に考えられる、地に足のついた恋愛スタイルです。',
+    strengths:['現実的な視点','安定した関係構築','自立している','ライフプランが明確'],
+    aruaru:['家のローンも保険も一緒に比較検討','「老後の計画」まで考えてる','でも普段は気楽にまったり過ごす','堅実だけど愛情はちゃんと伝える'],
+    advice:['計画に集中しすぎて「ロマンス不足」にならないように','パートナーにも計画性を求めすぎないで','たまには予定のないデートを楽しんでみて'],
+    child:'子どもの有無は早めに話し合いたい。経済面や育児環境も含めて現実的に考えるタイプ',
+    bestMatch:['RPTD','RSTD'], growMatch:['OPFD','OSFD'],
+    bestReason:'あなたの計画を一緒に歩んでくれる密着・柔軟タイプとの相性◎',
+    growReason:'堅実すぎて「面白みがない」と感じさせないよう、遊び心も大切に'
+  },
+  'OSTD': {
+    name:'ぬくもりの守護者', emoji:'🧸',
+    copy:'安心と温もりで、パートナーを包み込む愛の人',
+    desc:'愛情はオープンに伝え、安定した関係の中でパートナーとたくさんの時間を共有したいあなた。将来は二人で柔軟に決めていくスタイル。「一緒にいるだけで安心」という空気を作り出す天性の包容力が魅力です。',
+    strengths:['包容力がある','安定感がある','パートナーを安心させる','温かい雰囲気'],
+    aruaru:['おうちデートが何より幸せ','パートナーの好きなご飯を作ってあげたい','「無理しなくていいよ」が口癖','二人でのんびりする時間が宝物'],
+    advice:['居心地の良さに甘えて、重要な話し合いを避けていませんか？','パートナーへの依存と愛情の境界に注意','外の世界にも一緒に出かけて、新しい体験を'],
+    child:'子どもは二人の気持ちが揃った時に。温かい家庭を築きたい願望が強い',
+    bestMatch:['RPFL','RPFD'], growMatch:['OSTL','OPTD'],
+    bestReason:'あなたの温かさの中に刺激を加えてくれる情熱・自立タイプとの相性◎',
+    growReason:'安定型同士は変化を恐れがち。お互いの成長を促す関係を意識して'
+  },
+  'OSTL': {
+    name:'家族愛のデザイナー', emoji:'🏠',
+    copy:'揺るぎない愛と計画で、確かな幸せを設計する人',
+    desc:'愛情表現はオープンで、安定した関係の中でパートナーと密接に過ごし、人生のプランもしっかり持つあなた。結婚・子育て・老後まで見据えた「二人の人生設計」を一緒に描きたいタイプ。堅実な愛と温かさの持ち主です。',
+    strengths:['家族を大切にする','計画性がある','安心感を与える','責任感が強い'],
+    aruaru:['「子どもは何人欲しい？」を早めに聞く','将来の教育方針や住む場所のイメージが具体的','家事の分担表を一緒に作りたい','でも「愛してる」はちゃんと言う'],
+    advice:['計画に固執しすぎると、パートナーが窮屈に感じるかも','「今」を楽しむことも忘れずに','変化を受け入れる柔軟さが長続きの秘訣'],
+    child:'子どもについては早めに価値観のすり合わせをしたい。育児環境や教育方針まで話し合うタイプ',
+    bestMatch:['RPFD','RPFL'], growMatch:['OPFD','OSTD'],
+    bestReason:'あなたの計画に情熱で色を添えてくれるパートナーとの相性◎',
+    growReason:'「正解」にこだわりすぎず、一緒に試行錯誤する姿勢が大切'
+  },
+  // === Reserved Types ===
+  'RPFD': {
+    name:'秘めた炎の自由人', emoji:'🌹',
+    copy:'内に秘めた情熱と、自由な魂を持つミステリアスな恋愛家',
+    desc:'愛情表現は控えめだけど、内面には強い情熱を秘めているあなた。自分の世界を大切にしながら、パートナーとの関係には深いときめきを求めます。言葉より行動で愛を示し、将来は柔軟に対応するタイプ。ミステリアスな魅力の持ち主。',
+    strengths:['深い内面世界','行動で愛を示す','自立心が強い','適応力がある'],
+    aruaru:['「好き」は言わないけど、さりげなく世話を焼く','一人の時間が絶対必要','でも夜はパートナーのそばにいたい','気持ちを聞かれると照れる'],
+    advice:['「察して」文化は限界がある。時には言葉で伝える勇気を','内に秘めた情熱が伝わらず、「冷たい」と誤解されることも','パートナーの表現スタイルも受け入れて'],
+    child:'子どもは自然体で。考えるより感じるタイプだけど、大事なことは話し合える',
+    bestMatch:['OSTL','OPTD'], growMatch:['RPFL','RSFD'],
+    bestReason:'あなたの内面の情熱を引き出してくれるオープン・安定タイプとの相性◎',
+    growReason:'控えめタイプ同士はすれ違いやすい。小さなコミュニケーションを大切に'
+  },
+  'RPFL': {
+    name:'静かなる戦略家', emoji:'🌙',
+    copy:'控えめな表現の裏に、深い愛と確かなビジョンを持つ人',
+    desc:'愛情表現は控えめだけど、パートナーとの関係には情熱を持ち、人生の計画もしっかりしているあなた。自立心が強く、自分のペースを大切にしつつ、将来のビジョンは明確。言葉少なだけど、行動でしっかり愛を証明するタイプ。',
+    strengths:['深い思考力','計画的な行動','芯が強い','信頼できる'],
+    aruaru:['黙って家事をやっておくタイプ','将来の貯金プランは密かに完璧','でも情熱的な面もある','「言わなくてもわかるでしょ？」'],
+    advice:['言わなくてもわかる、は通用しないことが多い','計画は二人で共有してこそ価値がある','たまにはサプライズで気持ちを伝えて'],
+    child:'子どもの計画は内心しっかり持っている。でも伝えるのが苦手なことも',
+    bestMatch:['OSTD','OPTL'], growMatch:['RPFD','RSFL'],
+    bestReason:'あなたの想いを安全に引き出してくれるオープン・密着タイプとの相性◎',
+    growReason:'お互い控えめすぎると感情が通い合わない。「伝える練習」を一緒に'
+  },
+  'RPTD': {
+    name:'愛情深いガーディアン', emoji:'🛡️',
+    copy:'静かな情熱と深い絆で、パートナーを守り抜く人',
+    desc:'言葉で表現するのは苦手だけど、パートナーとの親密な時間を何より大切にするあなた。強い情熱を内に秘めつつ、常にパートナーのそばにいたいタイプ。将来は二人で柔軟に決めたい。不器用だけど、誰より深い愛情の持ち主。',
+    strengths:['深い愛情','忠誠心が強い','包容力','一途'],
+    aruaru:['言葉にはしないけど、ずっとそばにいる','パートナーの変化に敏感','嫉妬はするけど隠す','行動で愛を示す不器用さが魅力'],
+    advice:['「言わなくてもわかる」は最大の落とし穴。言葉にする努力を','密着しすぎて自分を見失わないで','嫉妬の気持ちも正直に、冷静に伝えて'],
+    child:'子どもが出来たら全力で守りたい。でも二人の関係が最優先',
+    bestMatch:['OSFL','OPFL'], growMatch:['RPTL','OPTD'],
+    bestReason:'あなたの想いを言語化してくれるオープン・計画タイプとの相性◎',
+    growReason:'密着型同士は共依存に注意。お互いの自立を応援して'
+  },
+  'RPTL': {
+    name:'揺るぎない愛の番人', emoji:'💎',
+    copy:'静かな情熱と確かな計画で、深い絆を育む人',
+    desc:'愛情表現は控えめだけど、パートナーとの密接な関係と将来の計画をしっかり持つあなた。「この人」と決めたら一途に尽くし、二人の未来を着実に築いていくタイプ。内面の情熱と外面の堅実さのギャップが魅力です。',
+    strengths:['一途で深い愛','計画性','責任感','粘り強さ'],
+    aruaru:['黙々と家を探し、密かに貯金している','パートナーの体調管理まで気にする','将来設計のExcelを密かに作っている','でも夜は甘えたい'],
+    advice:['コントロールと愛情の違いに注意','完璧を求めすぎず、時にはゆるさも必要','気持ちを言葉にする練習を日常的に'],
+    child:'子どもについて明確なビジョンあり。でもそれを伝えるのに時間がかかる',
+    bestMatch:['OSFD','OPFD'], growMatch:['RPTD','OPTL'],
+    bestReason:'あなたの堅実さに自由な風を吹き込んでくれるタイプとの相性◎',
+    growReason:'計画型同士はルールが多くなりがち。「感情」を優先する時間を作って'
+  },
+  'RSFD': {
+    name:'マイペースな癒し人', emoji:'🍵',
+    copy:'穏やかで自立した、自然体の愛のカタチ',
+    desc:'愛情表現は控えめで、安定した関係の中で自分の時間も大切にしたいあなた。将来は柔軟に考え、プレッシャーの少ない関係が理想。お互いを束縛せず、自然体でいられる穏やかな恋愛スタイルの持ち主です。',
+    strengths:['マイペース','心の安定感','相手を尊重する','穏やか'],
+    aruaru:['「今日何したい？」「何でもいいよ」','一緒にいるけど各自スマホタイム','記念日を忘れがち（悪気はない）','でも一緒にいるだけで落ち着く'],
+    advice:['穏やかすぎて「興味がない」と思われることも','記念日や特別な日は意識して大切に','たまには自分から「好き」と伝えてみて'],
+    child:'子どもは二人の自然な流れで。プレッシャーは苦手',
+    bestMatch:['OPTL','OPTD'], growMatch:['RSFL','RPFD'],
+    bestReason:'あなたの穏やかさに愛の言葉と計画を加えてくれるタイプとの相性◎',
+    growReason:'控えめ×自立同士は距離が空きすぎることも。意識的に近づく時間を'
+  },
+  'RSFL': {
+    name:'静かなる知性派', emoji:'📚',
+    copy:'冷静な分析力と穏やかな愛で、確かな関係を築く人',
+    desc:'愛情は控えめに、安定した関係の中で自分の空間を持ち、将来は計画的に進めたいあなた。感情よりも理性で動く傾向がありますが、その分、一度築いた関係は非常に安定。パートナーに対して誠実で、長い目で関係を育てるタイプ。',
+    strengths:['冷静な判断力','誠実','安定感','長期的視点'],
+    aruaru:['恋愛もロジカルに考えがち','「好き」の代わりに「いつもありがとう」','二人の貯蓄目標がある','感情を見せるのは照れくさい'],
+    advice:['ロジックだけでは関係は維持できない。感情も大切に','パートナーの感情的なニーズに寄り添う意識を','完璧な計画より、不完全でも温かい関係を'],
+    child:'子どもについて論理的に考えるけど、パートナーの気持ちも確認することが大切',
+    bestMatch:['OPFD','OPTD'], growMatch:['RSFD','RPFL'],
+    bestReason:'あなたの理性的な面に情熱と表現力を加えてくれるタイプとの相性◎',
+    growReason:'控えめ×計画同士は「事務的な関係」になりがち。感情の交流を意識して'
+  },
+  'RSTD': {
+    name:'やすらぎのパートナー', emoji:'☁️',
+    copy:'穏やかな存在感で、パートナーに安らぎを与える人',
+    desc:'愛情表現は控えめだけど、パートナーとの安定した関係の中でたくさんの時間を共有したいあなた。刺激より安心を求め、将来は二人で柔軟に決めたいタイプ。「いつもそばにいる安心感」を与える、温かい存在です。',
+    strengths:['安心感の塊','忍耐力','思いやり','包容力'],
+    aruaru:['一緒にいるだけで安心する','「何もしない二人の時間」が至福','ケンカしても翌日には普通に戻る','パートナーの話を黙って聞けるタイプ'],
+    advice:['「安心」に甘えて、重要な話し合いを避けていませんか？','自分の気持ちや要望も伝えることが関係の健全さに','変化を恐れず、二人で新しいことにも挑戦してみて'],
+    child:'子どもは二人が望んだ時に。焦らず、自然体でいきたい',
+    bestMatch:['OPFL','OPFD'], growMatch:['RSTL','OSTD'],
+    bestReason:'あなたの安心感に言葉と情熱を加えてくれるオープン・情熱型との相性◎',
+    growReason:'安定型同士は変化がなくなりがち。一緒に成長する目標を持って'
+  },
+  'RSTL': {
+    name:'静かな愛の設計士', emoji:'🕊️',
+    copy:'控えめな愛と確かな計画で、二人の未来を見守る人',
+    desc:'愛情表現は控えめで、安定した関係の中でパートナーと密接に過ごし、将来は計画的に。一見クールだけど、実は誰より二人の未来を真剣に考えているあなた。行動で示す愛と、着実に積み上げる信頼関係が最大の武器です。',
+    strengths:['堅実','忍耐強い','責任感','長期的に信頼される'],
+    aruaru:['黙って保険の見直しをしている','パートナーの健康診断の予約を取る','感情より行動で愛を示す','「大丈夫？」が精一杯の愛の言葉'],
+    advice:['行動だけでなく、言葉でも愛を伝えて。パートナーは言葉を待っている','計画にパートナーを巻き込んで、二人で作り上げるプロセスを楽しんで','たまには感情的になってもいい。それも愛の表現'],
+    child:'子どもの計画は具体的だけど、パートナーに伝えるのは苦手。早めに話し合いの場を',
+    bestMatch:['OPFD','OPTD'], growMatch:['RSTD','RPTL'],
+    bestReason:'あなたの堅実さに愛の言葉と柔軟さを加えてくれるタイプとの相性◎',
+    growReason:'控えめ×計画同士は「ルール過多」になりがち。遊び心と感情の交流を'
+  }
+};
+
+// ============================
+// STATE
+// ============================
+let currentQ = 0;
+let answers = new Array(QUESTIONS.length).fill(null);
+let scores = [0,0,0,0]; // A, I, B, O
+let partnerCode = null;
+
+// Check for partner code in URL
+(function(){
+  const p = new URLSearchParams(window.location.search);
+  if(p.get('p')) partnerCode = p.get('p');
+})();
+
+// ============================
+// SCREEN MANAGEMENT
+// ============================
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function startQuiz(){
+  currentQ = 0;
+  answers.fill(null);
+  scores = [0,0,0,0];
+  renderQ();
+  showScreen('qScreen');
+}
+
+// ============================
+// QUESTION RENDERING
+// ============================
+function renderQ(){
+  const q = QUESTIONS[currentQ];
+  const ax = AXES[q.axis];
+  document.getElementById('qBar').style.width = ((currentQ+1)/QUESTIONS.length*100)+'%';
+  document.getElementById('qNum').textContent = (currentQ+1)+'/'+QUESTIONS.length;
+  document.getElementById('qAxis').innerHTML = ax.icon+' '+ax.name;
+  document.getElementById('qText').textContent = q.text;
+  
+  const optDiv = document.getElementById('qOpts');
+  optDiv.innerHTML = '';
+  q.opts.forEach((o,i)=>{
+    const btn = document.createElement('div');
+    btn.className = 'q-opt' + (answers[currentQ]===i?' selected':'');
+    btn.textContent = o.t;
+    btn.onclick = ()=>selectOpt(i);
+    optDiv.appendChild(btn);
+  });
+  
+  document.getElementById('prevBtn').disabled = currentQ===0;
+  document.getElementById('nextBtn').disabled = answers[currentQ]===null;
+  document.getElementById('nextBtn').textContent = currentQ===QUESTIONS.length-1?'結果を見る →':'次へ →';
+}
+
+function selectOpt(i){
+  answers[currentQ] = i;
+  document.querySelectorAll('.q-opt').forEach((el,idx)=>{
+    el.classList.toggle('selected',idx===i);
+  });
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQ(){
+  if(answers[currentQ]===null) return;
+  if(currentQ < QUESTIONS.length-1){
+    currentQ++;
+    renderQ();
+  } else {
+    calculateResult();
+  }
+}
+
+function prevQ(){
+  if(currentQ>0){
+    currentQ--;
+    renderQ();
+  }
+}
+
+// ============================
+// CALCULATION
+// ============================
+function calculateResult(){
+  scores = [0,0,0,0];
+  for(let i=0;i<QUESTIONS.length;i++){
+    if(answers[i]!==null){
+      const s = QUESTIONS[i].opts[answers[i]].s;
+      for(let j=0;j<4;j++) scores[j]+=s[j];
+    }
+  }
+  showLoading();
+}
+
+function getTypeCode(){
+  const a = scores[0]>=0?'O':'R';
+  const i = scores[1]>=0?'P':'S';
+  const b = scores[2]>=0?'F':'T';
+  const o = scores[3]>=0?'D':'L';
+  return a+i+b+o;
+}
+
+// ============================
+// LOADING ANIMATION
+// ============================
+function showLoading(){
+  showScreen('loadScreen');
+  const loadAxes = document.getElementById('loadAxes');
+  loadAxes.innerHTML = '';
+  
+  AXES.forEach((ax,i)=>{
+    const d = document.createElement('div');
+    d.className = 'loading-axis';
+    d.innerHTML = `
+      <span class="loading-axis-icon" style="animation-delay:${i*0.8}s">${ax.icon}</span>
+      <span class="loading-axis-label" style="animation-delay:${i*0.8+0.2}s">${ax.name}を分析中...</span>
+      <span class="loading-axis-check" style="animation-delay:${i*0.8+0.6}s">✓</span>`;
+    loadAxes.appendChild(d);
+  });
+  
+  setTimeout(()=>showResult(), 3200);
+}
+
+// ============================
+// RESULT RENDERING
+// ============================
+function showResult(){
+  const code = getTypeCode();
+  const type = TYPES[code];
+  if(!type){ console.error('Type not found:',code); return; }
+  
+  const maxScore = 15; // 5 questions × 3 max per axis
+  const normScores = scores.map(s => Math.round((s/maxScore)*50 + 50)); // 0-100 scale, 50=center
+  
+  let html = `
+  <div class="result-header">
+    <p class="result-pre">あなたの愛のカタチは…</p>
+    <div class="result-type-code">${code}</div>
+    <div class="result-emoji">${type.emoji}</div>
+    <h1 class="result-name">${type.name}</h1>
+    <p class="result-copy">${type.copy}</p>
+  </div>
+  
+  <div class="result-card">
+    <h3>📊 あなたの4軸スコア</h3>
+    <div class="axis-bars">
+      ${AXES.map((ax,i)=>{
+        const pct = normScores[i];
+        return `<div class="axis-bar-item">
+          <span class="axis-label-l">${ax.tagL}</span>
+          <div class="axis-bar-track">
+            <div class="axis-bar-center"></div>
+            <div class="axis-bar-dot" style="left:${pct}%;background:${ax.color}"></div>
+          </div>
+          <span class="axis-label-r">${ax.tagR}</span>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>
+  
+  <div class="result-card">
+    <h3>📝 あなたの傾向</h3>
+    <p>${type.desc}</p>
+  </div>
+  
+  <div class="result-card">
+    <h3>✨ あなたの強み</h3>
+    <div class="tag-list">
+      ${type.strengths.map(s=>`<span class="tag">${s}</span>`).join('')}
+    </div>
+  </div>
+  
+  <div class="result-card">
+    <h3>😊 あるある</h3>
+    <div class="tag-list">
+      ${type.aruaru.map(s=>`<span class="tag">${s}</span>`).join('')}
+    </div>
+  </div>
+
+  <div class="result-card">
+    <h3>👶 子ども・家族への価値観</h3>
+    <div class="child-val">
+      <span class="child-val-icon">🍼</span>
+      <span class="child-val-text">${type.child}</span>
+    </div>
+  </div>
+  
+  <div class="result-card">
+    <h3>💡 より良い関係のためのアドバイス</h3>
+    <div class="advice-list">
+      ${type.advice.map((a,i)=>`<div class="advice-item"><span class="advice-num">${i+1}</span><span class="advice-text">${a}</span></div>`).join('')}
+    </div>
+  </div>
+  
+  <div class="result-card">
+    <h3>💑 相性のいいタイプ</h3>
+    <div class="compat-best">
+      <div class="compat-label">✨ ベストマッチ</div>
+      <div class="compat-types">${type.bestMatch.map(c=>{const t=TYPES[c];return t?t.emoji+' '+t.name+' ('+c+')':c}).join('、')}</div>
+      <div class="compat-reason">${type.bestReason}</div>
+    </div>
+    <div class="compat-grow">
+      <div class="compat-label">🌱 成長できる相手</div>
+      <div class="compat-types">${type.growMatch.map(c=>{const t=TYPES[c];return t?t.emoji+' '+t.name+' ('+c+')':c}).join('、')}</div>
+      <div class="compat-reason">${type.growReason}</div>
+    </div>
+  </div>`;
+  
+  // Partner comparison
+  if(partnerCode && TYPES[partnerCode]){
+    const pt = TYPES[partnerCode];
+    const matchScore = calcCompatibility(code, partnerCode);
+    html += `
+    <div class="result-card" style="border:2px solid var(--pink)">
+      <h3>💞 パートナーとの相性分析</h3>
+      <p style="text-align:center;margin-bottom:8px">パートナーのタイプ: <strong>${pt.emoji} ${pt.name} (${partnerCode})</strong></p>
+      <div class="partner-match-score">${matchScore}%</div>
+      <div class="partner-match-label">相性スコア</div>
+      <p style="font-size:.85rem;line-height:1.8">${getCompatAdvice(code, partnerCode)}</p>
+    </div>`;
+  }
+  
+  // Partner share section
+  html += `
+  <div class="partner-section">
+    <h3>💌 パートナーにも診断してもらおう</h3>
+    <p style="font-size:.82rem;color:var(--sub);margin-bottom:16px">パートナーが診断すると、二人の相性が分析されます</p>
+    <button class="partner-btn" onclick="shareToPartner()">パートナー用リンクをコピー</button>
+    <p id="partnerCopied" style="font-size:.75rem;color:var(--mint);margin-top:8px;display:none">✓ コピーしました！パートナーに送ってください</p>
+  </div>`;
+  
+  // Share & Retry
+  const shareText = `【aibo 愛・I 診断】\n私の愛のカタチは「${type.name}」${type.emoji}でした！\nあなたも診断してみて💕`;
+  const shareUrl = window.location.origin + window.location.pathname;
+  
+  html += `
+  <div class="share-section">
+    <h3>結果をシェアする</h3>
+    <div class="share-btns">
+      <button class="share-btn x" onclick="window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent('${shareText}')+'&url='+encodeURIComponent('${shareUrl}'),'_blank')">𝕏 シェア</button>
+      <button class="share-btn line" onclick="window.open('https://social-plugins.line.me/lineit/share?url='+encodeURIComponent('${shareUrl}')+'&text='+encodeURIComponent('${shareText}'),'_blank')">LINE</button>
+      <button class="share-btn copy" onclick="copyResult()">📋 コピー</button>
+    </div>
+    <button class="retry-btn" onclick="startQuiz()">もう一度診断する</button>
+  </div>`;
+  
+  document.getElementById('resultContent').innerHTML = html;
+  showScreen('resultScreen');
+}
+
+// ============================
+// COMPATIBILITY ENGINE
+// ============================
+function calcCompatibility(c1, c2){
+  let score = 60; // base
+  // Complementary scoring
+  for(let i=0;i<4;i++){
+    if(c1[i]===c2[i]) score += 5; // Same axis = moderate
+    else score += 8; // Complementary = high
+  }
+  // Best match bonus
+  const t1 = TYPES[c1];
+  if(t1 && t1.bestMatch.includes(c2)) score += 12;
+  // Communication bonus (at least one O)
+  if(c1[0]==='O' || c2[0]==='O') score += 5;
+  return Math.min(98, Math.max(45, score));
+}
+
+function getCompatAdvice(c1, c2){
+  const diffs = [];
+  const sames = [];
+  const labels = [['愛情表現','オープン','ひかえめ'],['親密スタイル','情熱的','安定的'],['距離感','自立型','密着型'],['将来観','柔軟型','計画型']];
+  const map = {'O':0,'R':1,'P':0,'S':1,'F':0,'T':1,'D':0,'L':1};
+  
+  for(let i=0;i<4;i++){
+    const v1 = labels[i][map[c1[i]]+1];
+    const v2 = labels[i][map[c2[i]]+1];
+    if(c1[i]===c2[i]) sames.push(labels[i][0]+'は共通（'+v1+'）');
+    else diffs.push(labels[i][0]+'が異なる（'+v1+' ↔ '+v2+'）');
+  }
+  
+  let advice = '';
+  if(sames.length>0) advice += '共通点: '+sames.join('、')+'。';
+  if(diffs.length>0) advice += ' 違いがある部分: '+diffs.join('、')+'。';
+  
+  if(diffs.length<=1) advice += ' お互いの価値観が近く、自然体で過ごせる関係です。共通点が多い分、マンネリには注意して新しい体験を一緒に。';
+  else if(diffs.length===2) advice += ' バランスの取れた組み合わせ。違いがある部分はお互いの「違い」を理解し合うことで、関係がより豊かになります。';
+  else advice += ' 多くの面で補い合える組み合わせ。最初は戸惑うかもしれませんが、お互いの「違い」を受け入れることで大きく成長できます。定期的に気持ちを共有する時間を作りましょう。';
+  
+  return advice;
+}
+
+// ============================
+// SHARE FUNCTIONS
+// ============================
+function shareToPartner(){
+  const code = getTypeCode();
+  const url = window.location.origin + window.location.pathname + '?p=' + code;
+  navigator.clipboard.writeText(url).then(()=>{
+    document.getElementById('partnerCopied').style.display='block';
+    setTimeout(()=>{document.getElementById('partnerCopied').style.display='none'},3000);
+  }).catch(()=>{
+    prompt('このリンクをパートナーに送ってください:', url);
+  });
+}
+
+function copyResult(){
+  const code = getTypeCode();
+  const type = TYPES[code];
+  const text = `【aibo 愛・I 診断結果】\nタイプ: ${type.emoji} ${type.name} (${code})\n${type.copy}\n\n診断はこちら→ ${window.location.origin+window.location.pathname}`;
+  navigator.clipboard.writeText(text).catch(()=>prompt('コピー:',text));
+}
+
+// ============================
+// PARTNER MODE INDICATOR
+// ============================
+if(partnerCode && TYPES[partnerCode]){
+  const pt = TYPES[partnerCode];
+  const banner = document.createElement('div');
+  banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:linear-gradient(90deg,var(--coral),var(--purple));color:#fff;text-align:center;padding:8px 12px;font-size:.75rem;z-index:999;box-shadow:0 2px 8px rgba(0,0,0,.1)';
+  banner.innerHTML = `💌 パートナー(${pt.emoji}${pt.name})の結果と比較されます`;
+  document.body.appendChild(banner);
+  document.body.style.paddingTop = '36px';
